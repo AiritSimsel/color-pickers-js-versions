@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+</head>
+
+<body>
+
+    <body>
+        <canvas id="myCanvas" width="600" height="600" style="border:1px solid #d3d3d3;"></canvas>
+        <div class="color-picker"></div>
+        <span id="color"></span>
+        <script>
+            let c = document.getElementById("myCanvas");
+            let ctx = c.getContext("2d");
+            const pickr = Pickr.create({
+                el: '.color-picker',
+                theme: 'classic',
+
+                components: {
+                    preview: true,
+                    opacity: true,
+                    hue: true,
+
+                    interaction: {
+                        hex: true,
+                        rgba: true,
+                        hsla: false,
+                        hsva: false,
+                        cmyk: false,
+                        input: true,
+                        clear: true,
+                        save: true
+                    }
+                }
+            });
+
+            let colors = [
+                'FFFCF4',
+                '08103C',
+                '646464',
+                '8D130D',
+                '674436',
+                'ED5A02',
+                'E28809',
+                'FAE100',
+                '7FA72E',
+                '005D34',
+                '115D67',
+                '005A86',
+                '223B53',
+                '421D95',
+                'B2459E',
+                '89264E',
+                '900919',
+                'D54075',
+                'E59265',
+                'FFFFFF',
+                '27272A',
+                'B3B3B0',
+                'D0342C',
+                '855C4B',
+                'FF7420',
+                'FB9D18',
+                'FEE715',
+                '9ACD32',
+                '008C4E',
+                '358082',
+                '007CB8',
+                '2E4964',
+                '5F4B8B',
+                'C180B5',
+                'A35776',
+                'BC2C3D',
+                'F07BA5',
+                'FBAC82',
+                'F0F0F0',
+                '2F2F2F',
+                'EBEBEB',
+                'F5615A',
+                'AC7862',
+                'FF9250',
+                'FFBD5D',
+                'FDF5A6',
+                'D7F795',
+                '00CB70',
+                '8AD3CA',
+                '86D8FF',
+                '345E88',
+                'A381FF',
+                'E2AFD8',
+                'D3789D',
+                'F7374E',
+                'FFC9DC',
+                'FAD8C5',
+            ]
+
+            pickr.on('change', (...args) => {
+                let color = args[0].toHEXA();
+                document.getElementById("color").innerHTML = color;
+                ctx.fillStyle = color
+                ctx.fillRect(10, 10, 200, 580);
+                jjColor = color.join('')
+                jjColorRGB = hexToRGB(jjColor)
+                ctx.fillStyle = compareColors(colors, jjColor)
+                ctx.fillRect(210, 10, 200, 580);
+
+
+                function compareColors(colors, jjColor) {
+
+                    jjColorRGB = hexToRGB(jjColor)
+                    console.log(jjColorRGB)
+                    colorArray = colors.map(hexToRGB)
+                    subtraction = colorArray.map(rrColorRGB => {
+                        return rrColorRGB.map((a, i) => a - jjColorRGB[i])
+                    })
+
+                    distance = subtraction.map(subtraction => {
+                        return Math.sqrt((subtraction[0]) ** 2 + (subtraction[1]) ** 2 + (subtraction[2]) ** 2)
+                    })
+
+                    console.log(distance)
+
+
+                    const min = Math.min(...distance)
+                    const index = distance.indexOf(min)
+
+                    return "#" + colors[index]
+                }
+
+                console.log(compareColors(colors, jjColor))
+
+
+                function hexToRGB(hex) {
+                    var bigint = parseInt(hex, 16);
+                    var r = (bigint >> 16) & 255;
+                    var g = (bigint >> 8) & 255;
+                    var b = bigint & 255;
+
+                    return [r, g, b];
+                }
+            });
+        </script>
+
+    </body>
+</body>
+
+</html>
