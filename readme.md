@@ -1,1 +1,1 @@
-## run ```$ npm install @simonwep/pickr``` to start working with the color-picker
+
